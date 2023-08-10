@@ -1,5 +1,6 @@
 import { BadRequestException } from "@nestjs/common";
 import { FastifyRequest } from "fastify";
+import { MultipartFile } from "@fastify/multipart";
 
 import { UploadOptions } from "../options";
 import { StorageFile } from "../../storage";
@@ -34,7 +35,10 @@ export const handleMultipartSingleFile = async (
           );
         }
 
-        const _file = await options.storage!.handleFile(part, req);
+        const _file = await options.storage!.handleFile(
+          <MultipartFile>part,
+          req,
+        );
 
         if (await filterUpload(options, req, _file)) {
           file = _file;
